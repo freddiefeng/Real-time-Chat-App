@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Chat Rooms</title>
+	
+	<script type="text/javascript">
+	function loadChatRoomList()
+	{
+		var sLogginName = getUrlVars()["n"]
+		
+		if (sLogginName)
+		{
+			var text = document.createTextNode(sLogginName)
+			document.getElementById("you").appendChild(text)
+			localStorage.setItem("nickname", sLogginName)
+		}
+		else
+		{
+			document.location = "about:blank"
+		}
+
+		
+		var XHR
+		if (window.XMLHttpRequest) { // Mozilla, Safari, ...
+		    XHR = new XMLHttpRequest()
+		} else if (window.ActiveXObject) { // IE
+		    XHR = new ActiveXObject("Microsoft.XMLHTTP")
+		}
+		
+		XHR.open("GET", "http://localhost:8080/Grace/ManageChatServlet?n=" + sLogginName, true)
+		
+		XHR.onreadystatechange = function (aEvt)
+		{
+			if (XHR.readyState == 4) {
+		     if(XHR.status == 200)
+		      parseResponse(XHR.responseText)
+		  }
+		}
+		
+		XHR.send(null)
+	}
+	
+	function parseResponse(responseText)
+	{
+		var responseObj = JSON.parse(responseText)
+		
+		//var sLogginName = responseObj.logginName
+		var chatRoomList = responseObj.chatRoomList
+		
+		var oRoomList = document.getElementById("roomlist")
+		for (var i = 0; i < chatRoomList.length; i++)
+		{
+			var oListItem = document.createElement("LI")
+			var oAnchor = document.createElement("A")
+			
+			oAnchor.href = "room/index.html?name=" + chatRoomList[i]
+			oAnchor.appendChild(document.createTextNode(chatRoomList[i]))
+			var roomname = chatRoomList[i]
+			oListItem.onclick = function ()
+			{
+				localStorage.setItem("roomname", roomname)
+			}
+			oListItem.appendChild(oAnchor)
+			
+			oRoomList.appendChild(oListItem)
+		}
+	}
+	
+	function getUrlVars() 
+	{     
+		var vars = [], hash;     
+		var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');     
+		for(var i = 0; i < hashes.length; i++)     
+		{         
+			hash = hashes[i].split('=');         
+			vars.push(hash[0]);         
+			vars[hash[0]] = hash[1];     
+		}     
+		return vars; 
+	}
+	
+	</script>
+    
+    <link rel="stylesheet" type="text/css" href="main.css"/>
+</head>
+
+<body onload="loadChatRoomList()">
+
+    <div id="page-wrap"> 
+    
+    	<div id="header">
+    	
+        	<h1><a href="/examples/Chat2/">Chat v2</a></h1>
+        	
+        	<div id="you"><span>Logged in as:</span> <?php //echo $_SESSION['userid']?></div>
+        	
+        </div>
+        
+    	<div id="section">
+    	
+            <div id="rooms">
+            	<h3>Rooms</h3>
+                <ul id="roomlist">
+                    <?php 
+                        /*while($rooms = mysql_fetch_array($roomResults)):
+                            $room = $rooms['name'];
+                            $query = mysql_query("SELECT * FROM `chat_users_rooms` WHERE `room` = '$room' ") or die("Cannot find data". mysql_error());
+                            $numOfUsers = mysql_num_rows($query);*/
+                    ?>
+                    <li>
+                        <!--<a href="room/?name=<?php //echo $rooms['name']?>"><?php  ?></a>-->
+                    </li>
+                    <?php //endwhile; ?>
+                </ul>
+            </div>
+        </div>
+        
+    </div>
+
+</body>
+
+</html>
+
+<?php 
+
+    /*else: 
+	   header('Location: http://css-tricks.com/examples/Chat2/');
+	   
+	endif;*/
+	
+?>
