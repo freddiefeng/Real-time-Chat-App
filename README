@@ -1,0 +1,3 @@
+This classic chat application features different communication models, which make it really flexible and adaptive. It was built as a simulation application to test the performance of the Ajax, Comet and HTML5 WebSocket communication models. The findings can be found through this link: http://freddiefeng.ca/blog/freddies-portfolio/. The code is fairly self-explanatory with minimal comment wherever necessary. Debugging code is commented out but can be useful for future development.
+
+Important Note: The backend server was adapted from the Java Chat Application(http://www.web-tech-india.com/software/jsp_chat.php) with extension to support Comet and WebSocket. The images and layouts for the front end come from the following source(http://css-tricks.com/chat2/).
